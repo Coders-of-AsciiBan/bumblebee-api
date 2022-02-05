@@ -57,15 +57,15 @@ Resources:
                   - 'dynamodb:*'
                 Resource:
                   - '*'
-      RoleName: api-pdiot-role
+      RoleName: bumblebee-api-role
 
   MyLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
       Code:
-        S3Bucket: api-pdiot
+        S3Bucket: bumblebee-api
         S3Key: !Join [ "/", [ !Ref BuildId, "lambda.zip" ] ]
-      FunctionName: api-pdiot
+      FunctionName: bumblebee-api
       Handler: lambda.handler
       PackageType: Zip
       Role: !GetAtt MyLambdaRole.Arn
