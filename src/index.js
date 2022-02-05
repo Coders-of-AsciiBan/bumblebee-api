@@ -23,6 +23,7 @@ module.exports = app
 
 
 app.get('/fetchCategories', function(req,res){
+    //Code to fetch the different categories from the db
     var categories = {"categories": [
         {
           "id": "729065",
@@ -58,6 +59,7 @@ app.get('/fetchCategories', function(req,res){
 
 app.get('/game', function(req, res){
     var category = req.query.category;
+    //Code to extract the data from the db based on the relevant category
     var product = [{
         "id": "P60371466",
         "name": "Lace-Up Trainers",
@@ -185,10 +187,38 @@ app.get('/game', function(req, res){
     res.status(200).send({"body": product, "message": "Success!"});
 });
 
-app.post('/gameScore', function(req, res){
+// Object format for submissionData
+// {
+//     "username": <name>,
+//     "email": <email>,
+//     "score": <score>,
+//     "submissionId": <UUID>,
+//     "submission": [{
+//         "productId": <productId>,
+//         "guessedPrice": <guessedPrice>,
+//         "actualPrice": <actualPrice>
+//     }],
+//     "timestamp": <timestamp>
+// }
 
+app.post('/gameScore', function(req, res){
+    var userData = req.body.data;
+    var {userName, email, score, submissionId, submissionData, timestamp} = userData;
+    //Code to store this data into the db
+    res.status(200).send({"message": "Data recorded!"});
 });
 
 app.get('/leaderboard', function(req,res){
-
+    //Code to fetch all the usernames and scores from the db and sending it to the front end
+    var userScores = [
+        {"userName": "abc",
+        "score": "4"
+    },
+    {"userName": "def",
+    "score": "7"
+},
+{"userName": "ghi",
+        "score": "3"
+    }];
+    res.status(200).send({"body":userScores, "message":"Success"});
 });
