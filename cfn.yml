@@ -3,7 +3,7 @@ Parameters:
   BuildId:
     Type: Number
     Description: The BuildId of the code being deployed
-Description: api-pdiot
+Description: bumblebee-api
 Resources:
 
   MyLambdaRole:
@@ -29,7 +29,7 @@ Resources:
               Action:
                 - 's3:GetObject'
               Resource:
-                - 'arn:aws:s3:::secrets-sasirekha3/api-pdiot*'
+                - 'arn:aws:s3:::secrets-sasirekha3/bumblebee-api*'
         - PolicyName: CloudwatchLogPolicy
           PolicyDocument:
             Version: "2012-10-17"
