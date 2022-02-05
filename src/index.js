@@ -20,3 +20,50 @@ app.get('/favicon.ico', function (req, res) {
 });
 
 module.exports = app
+
+
+app.get('/fetchCategories', function(req,res){
+    var categories = {"categories": [
+        {
+          "id": "729065",
+          "name": "Underwear & Socks"
+        },
+        {
+          "id": "644509",
+          "name": "Socks"
+        },
+        {
+          "id": "646583",
+          "name": "Underwear & Socks"
+        },
+        {
+          "id": "26850330",
+          "name": "Percy Pig Gifts"
+        },
+        {
+          "id": "26138718",
+          "name": "Men's Socks"
+        },
+        {
+          "id": "5363863",
+          "name": "Stocking Fillers for Him"
+        },
+        {
+          "id": "8834606",
+          "name": "Fun & Novelty Gifts for Him"
+        }
+      ]};
+      res.status(200).send({"body": categories, "message": "Success!"});
+});
+
+app.get('/game', function(req, res){
+
+});
+
+app.post('/gameScore', function(req, res){
+
+});
+
+app.get('/leaderboard', function(req,res){
+
+});
