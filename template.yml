@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  bumblebeeApi:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: lambda.handler
+      Runtime: nodejs12.x
+      Timeout: 300
+      Events:
+        RootEndpoint:
+          Properties:
+            Method: any
+            Path: /
+          Type: Api
+        EverythingElse:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY

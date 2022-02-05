@@ -1,0 +1,39 @@
+{
+  "name": "bumblebee-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lambda.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sasirekha3/api-pdiot.git"
+  },
+  "author": "Sasirekha Kambhampaty",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sasirekha3/api-pdiot/issues"
+  },
+  "homepage": "https://github.com/sasirekha3/api-pdiot#readme",
+  "dependencies": {
+    "@aws-crypto/sha256-browser": "^2.0.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.46.0",
+    "@aws-sdk/credential-provider-node": "^3.41.0",
+    "@aws-sdk/node-http-handler": "^3.40.0",
+    "@aws-sdk/protocol-http": "^3.40.0",
+    "@aws-sdk/signature-v4": "^3.40.0",
+    "amazon-cognito-identity-js": "^5.2.3",
+    "amazon-cognito-identity-js-node": "^0.0.3",
+    "aws-sdk": "^2.1024.0",
+    "aws-serverless-express": "^3.4.0",
+    "axios": "^0.24.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "jwk-to-pem": "^2.0.5",
+    "qs": "^6.10.1",
+    "uuid": "^8.3.2"
+  }
+}
