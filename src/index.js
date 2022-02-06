@@ -112,10 +112,11 @@ app.get('/leaderboard', async (req, res) => {
   //Code to fetch all the usernames and scores from the db and sending it to the front end
   try {
     const agg = await prisma.$queryRaw`
-    select U.username, sum(S.score) from "Submission" as S
+  select U.username , sum(S.score) as "sum" from "Submission" as S
     join "User" as U
       on U.id = S."userId"
-    group by U.username
+    group by U.username  
+    order by "sum" desc
     `;
 
     // const leaderboardData = await prisma.user.findMany({
