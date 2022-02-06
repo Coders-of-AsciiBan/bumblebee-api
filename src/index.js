@@ -64,7 +64,7 @@ app.post('/gameScore', async (req, res) => {
   var userData = req.body;
 
   var { userName, email, submissionData } = userData;
-  console.log(userData);
+  console.log(submissionData.gameItems);
   try {
     await prisma.submission.create({
       data: {
@@ -83,7 +83,7 @@ app.post('/gameScore', async (req, res) => {
         guesses: {
           createMany: {
             data: submissionData.gameItems.map((item) => {
-              return { ...item, guessedPrice: parseFloat(item.guessedPrice) };
+              return { ...item, guessedPrice: parseFloat(item?.guessedPrice ?? 0) };
             }),
           },
         },
