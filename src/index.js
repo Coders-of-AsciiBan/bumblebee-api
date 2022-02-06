@@ -12,6 +12,8 @@ const { PrismaClient } = pkg;
 
 const prisma = new PrismaClient();
 
+const randomProductSelector = require("./helperFunctions");
+
 //const prisma = new prisma.PrismaClient();
 app.use(express.json());
 app.use(cors());
@@ -23,7 +25,7 @@ app.get('/favicon.ico', function (req, res) {
 module.exports = app;
 
 app.get('/', function (req, res) {
-  res.status(200).send('Server ready at: http://localhost:3000 🚀');
+  res.status(200).send('Server is up and running... 🚀');
 });
 
 app.get('/fetchCategories', async (req, res) => {
@@ -38,10 +40,11 @@ app.get('/fetchCategories', async (req, res) => {
   }
 });
 
+
 app.get('/game', async (req, res) => {
   //Code to extract the data from the db based on the relevant category
   try {
-    const products = await prisma.product.findMany({
+    const allProducts = await prisma.product.findMany({
       select: {
         id: true,
         name: true,
@@ -50,26 +53,13 @@ app.get('/game', async (req, res) => {
         url: true,
       },
     });
+    const products = randomProductSelector.randomProductSelector(allProducts);
     res.status(200).send({ body: products, message: 'Success!!' });
   } catch (error) {
     console.log(error);
     res.status(404).send('Data Not Found!');
   }
 });
-
-// Object format for submissionData
-// {
-//     "username": <name>,
-//     "email": <email>,
-//     "score": <score>,
-//     "submissionId": <UUID>,
-//     "submission": [{
-//         "productId": <productId>,
-//         "guessedPrice": <guessedPrice>,
-//         "actualPrice": <actualPrice>
-//     }],
-//     "timestamp": <timestamp>
-// }
 
 app.post('/gameScore', async (req, res) => {
   var userData = req.body;
@@ -118,20 +108,6 @@ app.get('/leaderboard', async (req, res) => {
     group by U.username  
     order by "sum" desc
     `;
-
-    // const leaderboardData = await prisma.user.findMany({
-    //   include: {
-    //     submissions: true,
-    //   },
-    //   // select: {
-    //   //   username: true,
-    //   //   submissions: {
-    //   //     select: {
-    //   //       score: true,
-    //   //     },
-    //   //   },
-    //   // },
-    // });
     res.status(200).send({ body: agg, message: 'Data extracted successfully!' });
   } catch (error) {
     console.log(error);
@@ -143,3 +119,8 @@ app.listen(process.env.PORT || 4000, () =>
   console.log(`
 Server ready at: http://localhost:${process.env.PORT} 🚀 `)
 );
+
+// app.listen(5000, 'localhost', () => 
+// console.log(`
+// // Server ready at: http://localhost:5000 🚀 `)
+// );
