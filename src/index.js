@@ -157,7 +157,7 @@ app.get('/leaderboard', async (req, res) => {
   }
 });
 
-app.listen(process.env.PORT, () =>
+app.listen(process.env.PORT || 4000, () =>
   console.log(`
 Server ready at: http://localhost:${process.env.PORT} 🚀 `)
 );
