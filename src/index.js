@@ -111,17 +111,27 @@ app.post('/gameScore', async (req, res) => {
 app.get('/leaderboard', async (req, res) => {
   //Code to fetch all the usernames and scores from the db and sending it to the front end
   try {
-    const leaderboardData = await prisma.user.findMany({
-      select: {
-        username: true,
-        submissions: {
-          select: {
-            score: true,
-          },
-        },
-      },
-    });
-    res.status(200).send({ body: leaderboardData, message: 'Data extracted successfully!' });
+    const agg = await prisma.$queryRaw`
+    select U.username, sum(S.score) from "Submission" as S
+    join "User" as U
+      on U.id = S."userId"
+    group by U.username
+    `;
+
+    // const leaderboardData = await prisma.user.findMany({
+    //   include: {
+    //     submissions: true,
+    //   },
+    //   // select: {
+    //   //   username: true,
+    //   //   submissions: {
+    //   //     select: {
+    //   //       score: true,
+    //   //     },
+    //   //   },
+    //   // },
+    // });
+    res.status(200).send({ body: agg, message: 'Data extracted successfully!' });
   } catch (error) {
     console.log(error);
     res.status(500).send('Oops...Internal Server Error! Please try again later!');
