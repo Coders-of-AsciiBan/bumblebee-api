@@ -19,7 +19,7 @@ model Category {
 model Product {
   id          String   @id
   name        String
-  description String
+  description String?
   price       Float
   image       String
   url         String
