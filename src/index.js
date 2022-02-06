@@ -107,6 +107,7 @@ app.get('/leaderboard', async (req, res) => {
       on U.id = S."userId"
     group by U.username  
     order by "sum" desc
+    limit 10
     `;
     res.status(200).send({ body: agg, message: 'Data extracted successfully!' });
   } catch (error) {
