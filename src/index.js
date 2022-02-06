@@ -75,7 +75,7 @@ app.post('/gameScore', async (req, res) => {
               username: userName,
             },
             where: {
-              username: username,
+              username: userName,
             },
           },
         },
