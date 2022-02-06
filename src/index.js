@@ -1,11 +1,16 @@
 'use strict';
+
+const pkg = require('@prisma/client');
+
 const express = require('express');
 const cors = require('cors');
 const app = express();
 
-const { PrismaClient } = '@prisma/client';
+const { PrismaClient } = pkg;
 
 const prisma = new PrismaClient();
+
+//const prisma = new prisma.PrismaClient();
 
 app.use(cors());
 
@@ -15,177 +20,41 @@ app.get('/favicon.ico', function (req, res) {
 
 module.exports = app;
 
-app.get('/fetchCategories', function async(req, res) {
-  //Code to fetch the different categories from the db
-  const categories = await prisma.categories.findMany();
-
-  var categories = {
-    categories: [
-      {
-        id: '729065',
-        name: 'Underwear & Socks',
-      },
-      {
-        id: '644509',
-        name: 'Socks',
-      },
-      {
-        id: '646583',
-        name: 'Underwear & Socks',
-      },
-      {
-        id: '26850330',
-        name: 'Percy Pig Gifts',
-      },
-      {
-        id: '26138718',
-        name: "Men's Socks",
-      },
-      {
-        id: '5363863',
-        name: 'Stocking Fillers for Him',
-      },
-      {
-        id: '8834606',
-        name: 'Fun & Novelty Gifts for Him',
-      },
-    ],
-  };
-  res.status(200).send({ body: categories, message: 'Success!' });
+app.get('/', function(req,res){
+    res.status(200).send("Server ready at: http://localhost:3000 🚀");
 });
 
-app.get('/game', function (req, res) {
-  var category = req.query.category;
+app.get('/fetchCategories',  async(req, res) => {
+  //Code to fetch the different categories from the db
+  try{
+    const categories = await prisma.category.findMany();
+    console.log(categories);
+    res.status(200).send({ body: categories, message: 'Success!' });
+  }
+  catch(error){
+      console.log(error);
+      res.status(500).send("Internal Server Error :(");
+  }
+});
+
+app.get('/game', async (req, res) =>{
   //Code to extract the data from the db based on the relevant category
-  var product = [
-    {
-      id: 'P60371466',
-      name: 'Lace-Up Trainers',
-      description:
-        'Step out in style with these smart leather-look trainers. Round-toe design with a contrast sole. Lace-up fastening. Made with vegan-friendly materials.',
-      image: 'https://asset1.marksandspencer.com/is/image/mandstest/SD_03_T03_0035_Z0_X_EC_0',
-      categories: [
-        {
-          id: '28955369-2021-09-24 03:43:58',
-          name: "Men's Smartwear",
-        },
-        {
-          id: '24926181',
-          name: 'Men’s Summer Style',
-        },
-        {
-          id: '25824551',
-          name: 'Formalwear',
-        },
-        {
-          id: '15938446',
-          name: 'Mens Christmas Partywear',
-        },
-        {
-          id: '25977216',
-          name: "Men's Trainers",
-        },
-        {
-          id: 'UK_Curated30560614',
-          name: 'SP_MW Trainers Sep TMO',
-        },
-        {
-          id: '30252615',
-          name: 'Men',
-        },
-        {
-          id: '25977195',
-          name: "Men's Casual Shoes",
-        },
-        {
-          id: '28097167',
-          name: 'Big & Tall',
-        },
-        {
-          id: '28616463',
-          name: 'Shop the Look',
-        },
-        {
-          id: '26211920',
-          name: 'Sixth Form Clothing',
-        },
-        {
-          id: '28955369',
-          name: "Men's Smartwear",
-        },
-        {
-          id: '28626697',
-          name: 'Shop the Look',
-        },
-      ],
-      price: '35.0',
-      url: 'https://www.sit2.marksandspencer.com/lace-up-trainers/p/clp60371466',
-    },
-    {
-      id: 'P60371466',
-      name: 'Lace-Up Trainers',
-      description:
-        'Step out in style with these smart leather-look trainers. Round-toe design with a contrast sole. Lace-up fastening. Made with vegan-friendly materials.',
-      image: 'https://asset1.marksandspencer.com/is/image/mandstest/SD_03_T03_0035_Z0_X_EC_0',
-      categories: [
-        {
-          id: '28955369-2021-09-24 03:43:58',
-          name: "Men's Smartwear",
-        },
-        {
-          id: '24926181',
-          name: 'Men’s Summer Style',
-        },
-        {
-          id: '25824551',
-          name: 'Formalwear',
-        },
-        {
-          id: '15938446',
-          name: 'Mens Christmas Partywear',
-        },
-        {
-          id: '25977216',
-          name: "Men's Trainers",
-        },
-        {
-          id: 'UK_Curated30560614',
-          name: 'SP_MW Trainers Sep TMO',
-        },
-        {
-          id: '30252615',
-          name: 'Men',
-        },
-        {
-          id: '25977195',
-          name: "Men's Casual Shoes",
-        },
-        {
-          id: '28097167',
-          name: 'Big & Tall',
-        },
-        {
-          id: '28616463',
-          name: 'Shop the Look',
-        },
-        {
-          id: '26211920',
-          name: 'Sixth Form Clothing',
-        },
-        {
-          id: '28955369',
-          name: "Men's Smartwear",
-        },
-        {
-          id: '28626697',
-          name: 'Shop the Look',
-        },
-      ],
-      price: '35.0',
-      url: 'https://www.sit2.marksandspencer.com/lace-up-trainers/p/clp60371466',
-    },
-  ];
-  res.status(200).send({ body: product, message: 'Success!' });
+try{
+    const products = await prisma.product.findMany({
+        select : {
+            id: true,
+            name: true,
+            price: true,
+            image: true,
+            url: true
+        }
+    });
+    res.status(200).send({body: products, message: "Success!!"});
+}
+catch(error){
+    console.log(error);
+    res.status(404).send("Data Not Found!");
+}
 });
 
 // Object format for submissionData
@@ -202,19 +71,94 @@ app.get('/game', function (req, res) {
 //     "timestamp": <timestamp>
 // }
 
-app.post('/gameScore', function (req, res) {
-  var userData = req.body.data;
-  var { userName, email, score, submissionId, submissionData, timestamp } = userData;
-  //Code to store this data into the db
-  res.status(200).send({ message: 'Data recorded!' });
+app.get('/gameScore', async (req, res) => {
+  //var userData = req.body.data;
+
+  //Local testing implementation for userData - comment it out while commiting
+  var userData = {
+      "userName": "abc",
+      "email": "abc@gmail.com",
+      "submissionData": {
+          "score": 4,
+          "gameItems": [{
+            "productId": "P60515662",
+            "guessedPrice": 11
+          },
+          {
+            "productId": "P60371466",
+            "guessedPrice": 25
+          },
+          {
+            "productId": "P60370104",
+            "guessedPrice": 30
+          },
+          {
+            "productId": "P22491941",
+            "guessedPrice": 60
+          },
+          {
+            "productId": "P60267024",
+            "guessedPrice": 24
+          },
+        ]
+      }
+};
+var { userName, email, submissionData} = userData;
+try{
+    await prisma.submission.create({
+        data:{
+            user:{
+                connectOrCreate:{
+                    create:{
+                        email:email,
+                        username:userName
+                    },
+                    where:{
+                        email:email
+                    }
+                }
+            },
+            score:submissionData.score,
+            guesses:{
+              createMany:{
+                  data:submissionData.gameItems.map(item=>{
+                      return{...item}
+                  })
+              }
+            }
+        }
+      })
+      res.status(200).send({ message: 'Data recorded!' });
+}
+catch(error){
+    console.log(error);
+    res.status(500).send("Internal Server Error");
+}
+  //Code to store this data into the db 
 });
 
-app.get('/leaderboard', function (req, res) {
+app.get('/leaderboard', async (req, res) => {
   //Code to fetch all the usernames and scores from the db and sending it to the front end
-  var userScores = [
-    { userName: 'abc', score: '4' },
-    { userName: 'def', score: '7' },
-    { userName: 'ghi', score: '3' },
-  ];
-  res.status(200).send({ body: userScores, message: 'Success' });
+try{
+    const leaderboardData = await prisma.user.findMany({
+        select:{
+            username: true,
+            submissions:{
+                select:{
+                    score:true
+                }
+            }
+            }
+    });
+    res.status(200).send({"body":leaderboardData, "message": "Data extracted successfully!"});
+}
+catch(error){
+    console.log(error);
+    res.status(500).send("Oops...Internal Server Error! Please try again later!");
+}
 });
+
+const server = app.listen(3000, () =>
+  console.log(`
+Server ready at: http://localhost:300 🚀 `),
+);

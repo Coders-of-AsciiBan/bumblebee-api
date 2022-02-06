@@ -30,7 +30,8 @@ model Product {
 
 model Guess {
   id           Int         @id @default(autoincrement())
-  product      Product[]
+  product      Product     @relation(fields: [productId], references: [id])
+  productId    String
   guessedPrice Float
   submission   Submission? @relation(fields: [submissionId], references: [id])
   submissionId String?
@@ -48,7 +49,7 @@ model Submission {
 model User {
   id          Int          @id @default(autoincrement())
   username    String
-  email       String
+  email       String       @unique
   submissions Submission[]
 
 }
