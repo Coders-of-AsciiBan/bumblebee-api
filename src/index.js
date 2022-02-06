@@ -13,7 +13,7 @@ const { PrismaClient } = pkg;
 const prisma = new PrismaClient();
 
 //const prisma = new prisma.PrismaClient();
-
+app.use(express.json());
 app.use(cors());
 
 app.get('/favicon.ico', function (req, res) {
@@ -71,40 +71,11 @@ app.get('/game', async (req, res) => {
 //     "timestamp": <timestamp>
 // }
 
-app.get('/gameScore', async (req, res) => {
-  //var userData = req.body.data;
+app.post('/gameScore', async (req, res) => {
+  var userData = req.body;
 
-  //Local testing implementation for userData - comment it out while commiting
-  var userData = {
-    userName: 'abc',
-    email: 'abc@gmail.com',
-    submissionData: {
-      score: 4,
-      gameItems: [
-        {
-          productId: 'P60515662',
-          guessedPrice: 11,
-        },
-        {
-          productId: 'P60371466',
-          guessedPrice: 25,
-        },
-        {
-          productId: 'P60370104',
-          guessedPrice: 30,
-        },
-        {
-          productId: 'P22491941',
-          guessedPrice: 60,
-        },
-        {
-          productId: 'P60267024',
-          guessedPrice: 24,
-        },
-      ],
-    },
-  };
   var { userName, email, submissionData } = userData;
+  console.log(userData);
   try {
     await prisma.submission.create({
       data: {
@@ -123,7 +94,7 @@ app.get('/gameScore', async (req, res) => {
         guesses: {
           createMany: {
             data: submissionData.gameItems.map((item) => {
-              return { ...item };
+              return { ...item, guessedPrice: parseFloat(item.guessedPrice) };
             }),
           },
         },
