@@ -12,7 +12,7 @@ const { PrismaClient } = pkg;
 
 const prisma = new PrismaClient();
 
-const randomProductSelector = require("./helperFunctions");
+const randomProductSelector = require('./helperFunctions');
 
 //const prisma = new prisma.PrismaClient();
 app.use(express.json());
@@ -39,7 +39,6 @@ app.get('/fetchCategories', async (req, res) => {
     res.status(500).send('Internal Server Error :(');
   }
 });
-
 
 app.get('/game', async (req, res) => {
   //Code to extract the data from the db based on the relevant category
@@ -76,7 +75,7 @@ app.post('/gameScore', async (req, res) => {
               username: userName,
             },
             where: {
-              email: email,
+              username: username,
             },
           },
         },
@@ -121,7 +120,7 @@ app.listen(process.env.PORT || 4000, () =>
 Server ready at: http://localhost:${process.env.PORT} 🚀 `)
 );
 
-// app.listen(5000, 'localhost', () => 
+// app.listen(5000, 'localhost', () =>
 // console.log(`
 // // Server ready at: http://localhost:5000 🚀 `)
 // );
