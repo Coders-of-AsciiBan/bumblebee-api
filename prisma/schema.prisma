@@ -17,14 +17,14 @@ model Category {
 }
 
 model Product {
-  id          String   @id
+  id          String    @id
   name        String
   description String?
   price       Float
   image       String
   url         String
-  category    Category @relation(fields: [categoryId], references: [id])
-  categoryId  String
+  category    Category? @relation(fields: [categoryId], references: [id])
+  categoryId  String?
   guesses     Guess[]
 }
 
